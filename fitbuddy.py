@@ -864,27 +864,33 @@ The days array must contain exactly 7 days.
 """
 
 
-    try:
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt
-        )
+        import time
 
-        text = response.text.strip()
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=prompt
+            )
 
-        # Remove accidental markdown JSON fences
-        if text.startswith("```"):
-            text = text.replace("```json", "")
-            text = text.replace("```", "")
-            text = text.strip()
+            text = response.text.strip()
 
-        data = json.loads(text)
+            if text.startswith("```"):
+                text = text.replace("```json", "")
+                text = text.replace("```", "")
+                text = text.strip()
 
-        return data
+            data = json.loads(text)
 
-    except Exception as e:
-        print("Gemini error:", e)
-        return None
+            return data
+
+        except Exception as e:
+            print(f"Gemini attempt {attempt + 1} error:", e)
+
+            if attempt < 2:
+                time.sleep(5)
+
+    return None
 
 
 # ---------------------------------------------------------
