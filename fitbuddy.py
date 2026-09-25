@@ -21,174 +21,530 @@ else:
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>FitBuddy - AI Fitness Coach</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <style>
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-            }
+    <title>FitBuddy AI | Build. Train. Transform.</title>
 
-            body {
-                background: #07110c;
-                color: white;
-                min-height: 100vh;
-            }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-            .container {
-                max-width: 1100px;
-                margin: auto;
-                padding: 25px;
-            }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #050807;
+            color: white;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* NAVBAR */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 7%;
+            background: rgba(3, 7, 6, 0.96);
+            border-bottom: 1px solid #18231e;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 900;
+        }
+
+        .logo span {
+            color: #18ff8b;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #d8dedb;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #18ff8b;
+        }
+
+        .nav-button {
+            border: 1px solid #18ff8b;
+            color: #18ff8b !important;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 720px;
+            display: flex;
+            align-items: center;
+            padding: 70px 7%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(3,8,6,0.98) 0%,
+                    rgba(3,8,6,0.88) 40%,
+                    rgba(3,8,6,0.35) 75%,
+                    rgba(3,8,6,0.70) 100%
+                ),
+                url("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=1600&q=85")
+                center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .eyebrow {
+            color: #18ff8b;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(55px, 9vw, 105px);
+            line-height: 0.9;
+            font-weight: 950;
+            letter-spacing: -5px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: #18ff8b;
+        }
+
+        .tagline {
+            font-size: 34px;
+            font-weight: 800;
+            color: #18ff8b;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: #d0d8d4;
+            font-size: 19px;
+            max-width: 560px;
+            margin-bottom: 30px;
+        }
+
+        .main-button {
+            display: inline-block;
+            background: #18ff8b;
+            color: #031008;
+            padding: 17px 30px;
+            border-radius: 35px;
+            font-size: 17px;
+            font-weight: 900;
+            transition: 0.2s;
+        }
+
+        .main-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(24,255,139,0.25);
+        }
+
+        .trust-row {
+            display: flex;
+            gap: 35px;
+            margin-top: 40px;
+            color: #b8c3bd;
+            font-size: 14px;
+        }
+
+        .trust-row strong {
+            display: block;
+            color: white;
+            font-size: 15px;
+        }
+
+        /* FEATURES */
+        .features {
+            padding: 90px 7%;
+            background: #070d0b;
+        }
+
+        .section-title {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 55px;
+        }
+
+        .section-title small {
+            color: #18ff8b;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(35px, 5vw, 60px);
+            line-height: 1;
+            margin: 15px 0;
+        }
+
+        .section-title p {
+            color: #9eaaa4;
+            font-size: 17px;
+        }
+
+        .feature-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            background: #0b1310;
+            border: 1px solid #1b2923;
+            border-radius: 20px;
+            padding: 30px;
+            transition: 0.25s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: #18ff8b;
+        }
+
+        .icon {
+            width: 55px;
+            height: 55px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #18ff8b;
+            color: #031008;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #9da8a2;
+            font-size: 15px;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 100px 7%;
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    rgba(3,8,6,0.85),
+                    rgba(3,8,6,0.95)
+                ),
+                url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=85")
+                center/cover no-repeat;
+        }
+
+        .cta h2 {
+            font-size: clamp(40px, 7vw, 75px);
+            line-height: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .cta h2 span {
+            color: #18ff8b;
+        }
+
+        .cta p {
+            color: #c3ccc7;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 30px 7%;
+            text-align: center;
+            background: #030605;
+            color: #78827d;
+            font-size: 14px;
+        }
+
+        footer strong {
+            color: #18ff8b;
+        }
+
+        /* MOBILE */
+        @media (max-width: 800px) {
 
             nav {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 0;
+                padding: 16px 5%;
             }
 
-            .logo {
-                font-size: 25px;
-                font-weight: bold;
-                color: #39ff88;
-            }
-
-            .badge {
-                border: 1px solid #39ff88;
-                padding: 8px 14px;
-                border-radius: 20px;
-                color: #39ff88;
-                font-size: 13px;
+            .nav-links {
+                display: none;
             }
 
             .hero {
-                text-align: center;
-                padding: 90px 15px 70px;
+                min-height: 650px;
+                padding: 60px 6%;
+                background-position: 65% center;
             }
 
             .hero h1 {
-                font-size: 55px;
-                line-height: 1.1;
-                margin-bottom: 20px;
+                font-size: 60px;
+                letter-spacing: -3px;
             }
 
-            .hero h1 span {
-                color: #39ff88;
+            .tagline {
+                font-size: 26px;
             }
 
             .hero p {
-                color: #aab5ae;
-                font-size: 18px;
-                max-width: 650px;
-                margin: auto;
-                line-height: 1.7;
-            }
-
-            .btn {
-                display: inline-block;
-                margin-top: 35px;
-                padding: 16px 30px;
-                background: #39ff88;
-                color: #061009;
-                text-decoration: none;
-                border-radius: 12px;
-                font-weight: bold;
                 font-size: 16px;
             }
 
+            .trust-row {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
             .features {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
-                margin-top: 30px;
+                padding: 70px 6%;
             }
 
-            .feature {
-                background: #0d1b13;
-                border: 1px solid #1d3526;
-                border-radius: 18px;
-                padding: 28px;
+            .cta {
+                padding: 80px 6%;
             }
+        }
+    </style>
+</head>
 
-            .feature h3 {
-                color: #39ff88;
-                margin-bottom: 10px;
-            }
+<body>
 
-            .feature p {
-                color: #9ba79f;
-                line-height: 1.6;
-            }
+    <nav>
+        <div class="logo">
+            FitBuddy <span>AI</span>
+        </div>
 
-            @media(max-width: 700px) {
-                .hero h1 {
-                    font-size: 40px;
-                }
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a class="nav-button" href="/form">Get Started</a>
+        </div>
+    </nav>
 
-                .features {
-                    grid-template-columns: 1fr;
-                }
-            }
-        </style>
-    </head>
 
-    <body>
-        <div class="container">
+    <section class="hero">
 
-            <nav>
-                <div class="logo">FitBuddy</div>
-                <div class="badge">AI FITNESS COACH</div>
-            </nav>
+        <div class="hero-content">
 
-            <section class="hero">
-                <h1>Your Personal<br><span>AI Fitness Coach</span></h1>
+            <div class="eyebrow">
+                Your AI-Powered Fitness Partner
+            </div>
 
-                <p>
-                    Create a personalized 7-day fitness plan using
-                    Generative AI based on your goals, body details
-                    and workout preferences.
-                </p>
+            <h1>
+                FITBUDDY <span>AI</span>
+            </h1>
 
-                <a href="/form" class="btn">Create My Fitness Plan →</a>
-            </section>
+            <div class="tagline">
+                Build. Train. Transform.
+            </div>
 
-            <section class="features">
-                <div class="feature">
-                    <h3>🤖 AI Generated</h3>
-                    <p>
-                        Gemini AI creates a personalized weekly
-                        workout plan based on your information.
-                    </p>
+            <p>
+                Get personalized workout and fitness plans powered by AI.
+                Train smarter, stay consistent and work toward your goals.
+            </p>
+
+            <a class="main-button" href="/form">
+                ⚡ Create My Plan →
+            </a>
+
+            <div class="trust-row">
+
+                <div>
+                    <strong>✓ Personalized</strong>
+                    Plans
                 </div>
 
-                <div class="feature">
-                    <h3>🎯 Goal Based</h3>
-                    <p>
-                        Choose your fitness goal and workout intensity
-                        to generate a suitable plan.
-                    </p>
+                <div>
+                    <strong>⚡ AI Powered</strong>
+                    Fitness
                 </div>
 
-                <div class="feature">
-                    <h3>📅 7-Day Plan</h3>
-                    <p>
-                        Get a structured weekly schedule with exercises,
-                        sets, repetitions and recovery days.
-                    </p>
+                <div>
+                    <strong>♥ Goal Focused</strong>
+                    Training
                 </div>
-            </section>
+
+            </div>
 
         </div>
-    </body>
-    </html>
-    """
+
+    </section>
+
+
+    <section class="features" id="features">
+
+        <div class="section-title">
+
+            <small>POWERFUL FEATURES</small>
+
+            <h2>
+                Everything You Need
+                for a Stronger You
+            </h2>
+
+            <p>
+                FitBuddy AI brings your fitness journey together
+                in one simple place.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <div class="icon">🏋️</div>
+
+                <h3>AI Workout Plans</h3>
+
+                <p>
+                    Generate personalized 7-day workout plans
+                    based on your goals and fitness level.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="icon">🥗</div>
+
+                <h3>Diet & Meal Plans</h3>
+
+                <p>
+                    Plan nutritious meals to support your
+                    training and fitness goals.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="icon">📊</div>
+
+                <h3>Progress Tracking</h3>
+
+                <p>
+                    Keep track of workouts, measurements
+                    and your fitness progress.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="icon">🎯</div>
+
+                <h3>Goal Setting</h3>
+
+                <p>
+                    Set clear goals and stay motivated
+                    throughout your fitness journey.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="icon">📱</div>
+
+                <h3>Mobile Friendly</h3>
+
+                <p>
+                    Use FitBuddy AI comfortably on your
+                    phone, tablet or computer.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="icon">🚀</div>
+
+                <h3>Built to Grow</h3>
+
+                <p>
+                    A strong foundation for future fitness
+                    features and improvements.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="cta" id="about">
+
+        <h2>
+            LET'S BUILD A
+            <span>STRONGER YOU</span>
+        </h2>
+
+        <p>
+            Your next workout starts with one decision.
+        </p>
+
+        <a class="main-button" href="/form">
+            ⚡ Create My Plan →
+        </a>
+
+    </section>
+
+
+    <footer id="contact">
+
+        <strong>FitBuddy AI</strong>
+        — Build. Train. Transform.
+
+        <br><br>
+
+        General fitness information only.
+        Listen to your body and seek qualified professional advice when needed.
+
+    </footer>
+
+</body>
+</html>
+"""
 
 
 # ---------------------------------------------------------
