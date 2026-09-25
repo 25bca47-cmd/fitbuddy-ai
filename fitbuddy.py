@@ -866,29 +866,39 @@ The days array must contain exactly 7 days.
 
     import time
 
-    for attempt in range(3):
-        try:
-            response = client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt
-            )
+    models = [
+        "gemini-3.8-flash",
+        "gemini-3.7-flash",
+        "gemini-3.6-flash"
+    ]
 
-            text = response.text.strip()
+    for model_name in models:
+        for attempt in range(2):
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
 
-            if text.startswith("```"):
-                text = text.replace("```json", "")
-                text = text.replace("```", "")
-                text = text.strip()
+                text = response.text.strip()
 
-            data = json.loads(text)
+                if text.startswith("```"):
+                    text = text.replace("```json", "")
+                    text = text.replace("```", "")
+                    text = text.strip()
 
-            return data
+                data = json.loads(text)
 
-        except Exception as e:
-            print(f"Gemini attempt {attempt + 1} error:", e)
+                return data
 
-            if attempt < 2:
-                time.sleep(5)
+            except Exception as e:
+                print(
+                    f"Gemini {model_name} attempt {attempt + 1} error:",
+                    e
+                )
+
+                if attempt < 1:
+                    time.sleep(5)
 
     return None
 
